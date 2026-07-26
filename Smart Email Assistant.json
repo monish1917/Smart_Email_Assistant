@@ -1,0 +1,121 @@
+{
+  "name": "Smart Email Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "8b772304-4b08-4834-a91c-ed05578640a6",
+      "name": "When chat message received",
+      "webhookId": "bfccba0f-34ad-41a2-a7d8-18ac37af8380"
+    },
+    {
+      "parameters": {
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are Smart Email Assistant.\n\nYour job is to help users write professional emails.\n\nIf the user is creating a new email, ask for any missing information before generating it.\n\nIf the user says:\n- Make it formal\n- Make it friendly\n- Make it persuasive\n- Make it concise\n- Improve grammar\n- Regenerate\n- Rewrite\n\nthen modify the previous email stored in memory instead of creating a new one.\n\nGenerate emails with this format:\n\nSubject: <Subject>\n\nDear <Recipient>,\n\n<Email Body>\n\nRegards,\nMonish\n\nNever return JSON.\nNever use Markdown.\nAlways use proper paragraphs and formatting."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        160,
+        16
+      ],
+      "id": "6fea98a0-e54d-4fc6-a547-d83a65dff3c6",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        112,
+        224
+      ],
+      "id": "d3bd2fb2-05e6-4f05-be00-4a60767dad37",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Ht0awKg0osT4WIbD",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 15
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        256,
+        224
+      ],
+      "id": "01c984db-514c-4533-a501-7dc9792b4929",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "5a5ebfe5-2f05-476c-aa85-c35fcfa42571",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b3fcedd60f39426ad4dbbc675726598a1b2e5c172bd5057a7b67825391e54959"
+  },
+  "nodeGroups": [],
+  "id": "9ItxZMAbpscLUp1U",
+  "tags": []
+}
